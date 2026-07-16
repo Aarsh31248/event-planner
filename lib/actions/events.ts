@@ -43,7 +43,48 @@ function parseRsvp(formData: FormData) {
   return { name, email, status };
 }
 
+export async function createEventAction(formData: FormData) {
+  const session = await getSession();
+  const userId = session.data.user.id;
+  const input = parseCreateEvent(formData);
 
+  try {
+    const created = await prisma.event.create({
+      data: {
+        ownerUserId: userId,
+        title: input.title,
+        description: input.description,
+        location: input.location,
+        eventDate: input.eventDate ? new Date(input.eventDate) : null,
+      },
+    });
+    redirect(`/events/${created.id}`);
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+export async function createInviteLinkAction(eventId: string) {
+  const session = await getSession();
+  const userId = session.data.user.id;
+
+  const owns = await prisma.event.findFirst({
+    where: { id: eventId, ownerUserId: userId },
+    select: { id: true },
+  });
+
+  if (!owns) {
+    throw new Error("Event not found.");
+  }
+
+  const token = crypto.randomUUID().replace(/-/g, "");
+
+  await prisma.eventInvite.upsert({
+    where: { eventId },
+    create: { eventId, token },
+    update: { token },
+  });
+}
 
 export async function submitOrUpdateRsvpAction(
   token: string,
