@@ -45,8 +45,17 @@ function parseRsvp(formData: FormData) {
 
 export async function createEventAction(formData: FormData) {
   const session = await getSession();
+
+  // Guard clause: Block execution if the user is not authenticated
+  if (!session || !session.data || !session.data.user) {
+    throw new Error("Unauthorized: You must be logged in to create an event.");
+  }
+
   const userId = session.data.user.id;
   const input = parseCreateEvent(formData);
+
+  // 1. Declare a variable to store the created event ID out of scope
+  let createdEventId: string | null = null;
 
   try {
     const created = await prisma.event.create({
@@ -58,14 +67,30 @@ export async function createEventAction(formData: FormData) {
         eventDate: input.eventDate ? new Date(input.eventDate) : null,
       },
     });
-    redirect(`/events/${created.id}`);
+    
+    // Save the ID to use outside the try block
+    createdEventId = created.id; 
   } catch (err) {
     console.error(err);
+    // You should throw or return an error state here so your UI can display it
+    throw new Error("Failed to create event database entry.");
+  }
+
+  // 2. Perform the redirect out here, where Next.js can execute it freely
+  if (createdEventId) {
+    redirect(`/events/${createdEventId}`);
   }
 }
 
+
 export async function createInviteLinkAction(eventId: string) {
-  const session = await getSession();
+   const session = await getSession();
+
+  // Guard clause: Block execution if the user is not authenticated
+  if (!session || !session.data || !session.data.user) {
+    throw new Error("Unauthorized: You must be logged in to create an event.");
+  }
+  
   const userId = session.data.user.id;
 
   const owns = await prisma.event.findFirst({
