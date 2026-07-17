@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { getSession } from "../auth/server";
 import { prisma } from "../prisma";
 import { RsvpStatus } from "@/app/generated/prisma/enums";
+import { revalidatePath } from "next/cache";
 
 function parseCreateEvent(formData: FormData) {
   const title = String(formData.get("title") ?? "").trim();
@@ -109,6 +110,8 @@ export async function createInviteLinkAction(eventId: string) {
     create: { eventId, token },
     update: { token },
   });
+
+   revalidatePath(`/events/${eventId}`);
 }
 
 export async function submitOrUpdateRsvpAction(

@@ -89,6 +89,10 @@
 
 body {
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  /* Prevent the ambient circles from duplicating or tiling at the bottom */
+  background-repeat: no-repeat;
+  /* Lock the glow gradients permanently to the browser viewport layout */
+  background-attachment: fixed;
   background-image:
     radial-gradient(
       1200px circle at 20% -10%,
@@ -101,6 +105,7 @@ body {
       transparent 38%
     );
 }
+
 
 .dark {
   --background: oklch(0.145 0 0);
