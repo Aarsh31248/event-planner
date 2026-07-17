@@ -31,27 +31,38 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased dark`}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col bg-background text-foreground">
+      <body className="min-h-full flex flex-col bg-zinc-950 text-foreground relative overflow-x-hidden">
+        {/* Full-viewport background ambient gradients (No more box effect!) */}
+        <div className="absolute top-0 left-1/4 w-[1000px] h-[600px] rounded-full bg-violet-600/10 blur-[150px] pointer-events-none -translate-x-1/2 -translate-y-1/2 z-0" />
+        <div className="absolute top-1/3 right-0 w-[600px] h-[500px] rounded-full bg-fuchsia-500/5 blur-[130px] pointer-events-none translate-x-1/3 z-0" />
+
         {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
         <NeonAuthUIProvider authClient={authClient as any} defaultTheme="dark">
-          <header className="border-b border-border bg-(--surface)/90 backdrop-blur">
+          <header className="border-b border-zinc-800/50 bg-zinc-950/70 backdrop-blur sticky top-0 z-50">
             <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4">
-              <Link href={"/"} className="text-sm font-semibold tracking-wide">
+              <Link 
+                href={"/"} 
+                className="text-xl font-bold tracking-tight bg-gradient-to-r from-violet-400 via-fuchsia-500 to-indigo-400 bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(139,92,246,0.3)] hover:opacity-90 transition-opacity"
+              >
                 Event Planner
               </Link>
-              <nav className="flex items-center gap-4">
+              <nav className="flex items-center gap-6">
                 <Link
                   href={"/dashboard"}
-                  className="text-sm text-muted-foreground"
+                  className="text-sm font-medium text-muted-foreground hover:text-violet-400 relative py-1 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-gradient-to-r after:from-violet-500 after:to-fuchsia-500 after:transition-all after:duration-300 hover:after:w-full transition-colors duration-200"
                 >
                   Dashboard
                 </Link>
-                <UserButton size="icon" />
+                <div className="relative flex items-center justify-center p-[2px] rounded-full bg-gradient-to-tr from-violet-600 via-fuchsia-500 to-indigo-500 transition-transform duration-300 hover:scale-105 shadow-[0_0_15px_rgba(139,92,246,0.4)]">
+                  <div className="bg-zinc-950 p-[2px] rounded-full flex items-center justify-center">
+                    <UserButton size="icon" />
+                  </div>
+                </div>
               </nav>
             </div>
           </header>
 
-          <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col px-4 py-8">
+          <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col px-4 py-8 relative z-10">
             {children}
           </main>
         </NeonAuthUIProvider>
