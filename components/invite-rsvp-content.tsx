@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Button } from "./ui/button";
 import { prisma } from "@/lib/prisma";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
@@ -53,21 +52,21 @@ export async function InviteRsvpContent({
             RSVP
           </Badge>
           <CardTitle>{event.title}</CardTitle>
-          <p className="text-sm text-[var(--muted-foreground)]">
+          <p className="text-sm text-muted-foreground">
             {event.eventDate
               ? new Date(event.eventDate).toLocaleString()
               : "No date selected"}
             {event.location ? ` - ${event.location}` : ""}
           </p>
           {event.description ? (
-            <p className="text-sm text-[var(--muted-foreground)]">
+            <p className="text-sm text-muted-foreground">
               {event.description}
             </p>
           ) : null}
         </CardHeader>
         <CardContent>
           {submitted ? (
-            <p className="mb-4 rounded-md border border-[var(--accent)]/50 bg-[var(--accent)]/15 p-3 text-sm text-[#e9dbff]">
+            <p className="mb-4 rounded-md border border-(--accent)/50 bg-(--accent)/15 p-3 text-sm text-[#e9dbff]">
               Thanks. Your RSVP has been recorded (or updated).
             </p>
           ) : null}
@@ -93,7 +92,7 @@ export async function InviteRsvpContent({
                 name="status"
                 required
                 defaultValue="going"
-                className="flex h-10 w-full rounded-md border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-sm text-[var(--foreground)]"
+                className="flex h-10 w-full rounded-md border border-border bg-(--surface) px-3 py-2 text-sm text-foreground"
               >
                 <option value="going">Going</option>
                 <option value="maybe">Maybe</option>

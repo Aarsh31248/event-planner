@@ -1,4 +1,3 @@
-import { EventDetailContent } from "@/components/event-detail-content";
 import { InviteRsvpContent } from "@/components/invite-rsvp-content";
 
 export default async function InvitePage({
